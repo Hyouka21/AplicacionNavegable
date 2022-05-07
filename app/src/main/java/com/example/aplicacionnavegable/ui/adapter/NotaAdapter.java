@@ -1,11 +1,14 @@
 package com.example.aplicacionnavegable.ui.adapter;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aplicacionnavegable.R;
@@ -49,6 +52,14 @@ public class NotaAdapter  extends RecyclerView.Adapter<NotaAdapter.MiViewHolder>
 //
 //            }
 //        });
+        holder.editar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("nota", i);
+                Navigation.findNavController(root).navigate(R.id.crearNotaFragment,bundle);
+            }
+        });
 
     }
 
@@ -60,11 +71,12 @@ public class NotaAdapter  extends RecyclerView.Adapter<NotaAdapter.MiViewHolder>
     public class MiViewHolder extends RecyclerView.ViewHolder {
 
         private TextView TVTitulo,TVCuerpo;
+        private Button editar;
 
         public MiViewHolder(@NonNull View itemView) {
             super(itemView);
             TVTitulo = itemView.findViewById(R.id.TVTitulo);
-
+            editar = itemView.findViewById(R.id.BTEditar);
             TVCuerpo = itemView.findViewById(R.id.TVCuerpo);
 
         }

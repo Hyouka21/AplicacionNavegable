@@ -1,6 +1,8 @@
 package com.example.aplicacionnavegable.ui.entidades;
 
-public class Nota {
+import java.io.Serializable;
+
+public class Nota implements Serializable {
     private int id;
     private String titulo;
     private String cuerpo;

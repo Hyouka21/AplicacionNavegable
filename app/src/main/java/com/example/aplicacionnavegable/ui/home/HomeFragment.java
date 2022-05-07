@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment {
             }
         });
         homeViewModel.setLista();
+
         return root;
     }
 

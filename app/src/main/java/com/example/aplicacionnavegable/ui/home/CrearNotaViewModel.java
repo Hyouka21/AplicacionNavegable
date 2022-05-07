@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import java.util.List;
 public class CrearNotaViewModel extends AndroidViewModel {
     private static final String DB_NAME = "nota";
     private final MutableLiveData<Boolean> ok;
+    private final MutableLiveData<Nota> notaE;
     private Context context;
 
 
@@ -29,18 +31,23 @@ public class CrearNotaViewModel extends AndroidViewModel {
         super(application);
         ok = new MutableLiveData<>();
         context= application.getApplicationContext();
-
+        notaE =new MutableLiveData<>();
     }
 
     public LiveData<Boolean> getok() {
-        return ok;
+        if(ok==null){
+
+        }
+            return ok;
+    }
+    public LiveData<Nota> getnota() {
+        return notaE;
     }
     public void crearNota(String titulo,String cuerpo){
         SqLiteHelper mySQLiteHelper = new SqLiteHelper(context);
         SQLiteDatabase db = mySQLiteHelper.getWritableDatabase();
-        Log.d("Excep!!!","aqui1");
+
         if(db!=null){
-            Log.d("Excep!!!","aqui2");
             ContentValues cv = new ContentValues();
             cv.put("titulo", titulo);
             cv.put("cuerpo", cuerpo);
@@ -48,5 +55,31 @@ public class CrearNotaViewModel extends AndroidViewModel {
             ok.setValue(true);
         }
 
+    }
+    public void guardarCambios(Nota nota) {
+        SqLiteHelper mySQLiteHelper = new SqLiteHelper(context);
+        SQLiteDatabase db = mySQLiteHelper.getWritableDatabase();
+        ContentValues valoresParaActualizar = new ContentValues();
+        valoresParaActualizar.put("titulo", nota.getTitulo());
+        valoresParaActualizar.put("cuerpo", nota.getCuerpo());
+        // where id...
+        String campoParaActualizar = "_id = ?";
+        // ... = idnota
+        String[] argumentosParaActualizar = {String.valueOf(nota.getId())};
+         int valor = db.update(DB_NAME, valoresParaActualizar, campoParaActualizar, argumentosParaActualizar);
+         if(valor == 1){
+             ok.setValue(true);
+         }else{
+             ok.setValue(false);
+         }
+
+    }
+
+    public void editarNota (Bundle bundle){
+
+        if(bundle !=null){
+            Nota nota =(Nota) bundle.getSerializable("nota");
+            notaE.setValue(nota);
+        }
     }
 }
